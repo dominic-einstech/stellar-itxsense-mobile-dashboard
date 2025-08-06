@@ -8,8 +8,8 @@ export default function Navbar() {
   return (
     <div className="bottom-navbar">
       <button onClick={() => navigate('/home')}>Home</button>
-      <button onClick={() => navigate('/reports')}>Reports</button>
-      <button onClick={() => navigate('/account')}>Account</button>
+      <button onClick={() => navigate('/reports')}>Tickets</button>
+      <button onClick={() => navigate('/account')}>Maintenance</button>
     </div>
   );
 }

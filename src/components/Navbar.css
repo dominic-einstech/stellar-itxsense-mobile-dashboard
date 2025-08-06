@@ -1,26 +1,34 @@
+/* Navbar.css */
+
 .bottom-navbar {
   position: fixed;
   bottom: 0;
   left: 0;
-  right: 0;
+  width: 100%;
   height: 60px;
-  background-color: #0d1117;
-  border-top: 1px solid #30363d;
+  background-color: #ffffff;
+  border-top: 1px solid #ddd;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  z-index: 999;
+  z-index: 1000;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .bottom-navbar button {
   background: none;
   border: none;
-  color: #fff;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  padding: 10px;
   cursor: pointer;
+  transition: color 0.2s ease-in-out;
 }
 
 .bottom-navbar button:hover {
-  color: #00c8ff;
+  color: #007bff;
+}
+
+.bottom-navbar button:focus {
+  outline: none;
 }

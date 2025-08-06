@@ -36,7 +36,7 @@
 }
 
 .home-card {
-  background-color: #1f2235;
+  background-color: #1b1f33;
   padding: 20px;
   border-radius: 12px;
   text-align: center;
@@ -130,4 +130,42 @@
 
 .logout-btn:hover {
   background-color: #bb2d3b;
+}
+.home-title {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.home-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+}
+
+.home-logos {
+  align-self: flex-start;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.logo {
+  height: 30px;
+}
+
+.home-title-container {
+  width: 100%;
+  text-align: center;
+}
+
+.home-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  margin: 0;
 }
