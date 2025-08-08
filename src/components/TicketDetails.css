@@ -5,13 +5,14 @@
   border-radius: 8px;
   max-width: 900px;
   margin: 0 auto;
-  font-size: 0.7rem;
-  line-height: 1.25;
+  font-size: 0.9rem;
+  line-height: 1.4;
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-height: calc(100vh - 60px); /* fill the screen minus navbar/footer */
   box-sizing: border-box;
+  
 }
 
 body, html {
