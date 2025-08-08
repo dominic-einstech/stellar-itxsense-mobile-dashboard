@@ -71,7 +71,7 @@ export default function Home({ onLogout }) {
         return;
       }
 
-      setSearchResult(data.data[0]); // store full object
+      setSearchResult(data.data[0]);
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
@@ -106,12 +106,28 @@ export default function Home({ onLogout }) {
 
       {/* Logout button */}
       <div className="logout-bar">
-        <button className="logout-btn" onClick={onLogout || handleLogoutClick}>Logout</button>
+        <button className="logout-btn" onClick={onLogout || handleLogoutClick}>
+          Logout
+        </button>
+      </div>
+
+      {/* Top bar: Date/time + Search */}
+      <div className="top-bar">
+        <p className="home-timestamp">{new Date().toLocaleString()}</p>
+        <div className="search-inline">
+          <input
+            type="text"
+            placeholder="Enter Bus Stop Number"
+            value={busStopCode}
+            onChange={(e) => setBusStopCode(e.target.value)}
+          />
+          <button className="btn search-btn" onClick={handleSearch}>Search</button>
+          <button className="btn reset-btn" onClick={handleReset}>Reset</button>
+        </div>
       </div>
 
       {/* Overview section */}
       <h1 className="home-section-title">OVERVIEW</h1>
-      <p className="home-timestamp">{new Date().toLocaleString()}</p>
 
       <div className="home-grid">
         <div className="home-card">
@@ -130,18 +146,6 @@ export default function Home({ onLogout }) {
           <h3>Hybrid Panels</h3>
           <p className="home-value">{hybridPanels}</p>
         </div>
-      </div>
-
-      {/* Search section */}
-      <div className="search-section">
-        <input
-          type="text"
-          placeholder="Enter Bus Stop Number"
-          value={busStopCode}
-          onChange={(e) => setBusStopCode(e.target.value)}
-        />
-        <button className="btn search-btn" onClick={handleSearch}>Search</button>
-        <button className="btn reset-btn" onClick={handleReset}>Reset</button>
       </div>
 
       {/* Results section */}
