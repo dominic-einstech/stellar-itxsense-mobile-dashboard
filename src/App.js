@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
-import Navbar from './components/Navbar'; // import your navbar
+import Tickets from './components/Tickets'; // ✅ Import your tickets page
+import Navbar from './components/Navbar';
 import './App.css';
 
 // Wrapper to use hooks outside <Router>
@@ -24,7 +25,6 @@ function App() {
       const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
       setIsLoggedIn(loggedIn);
     }, 200);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -38,12 +38,12 @@ function App() {
     setIsLoggedIn(false);
   };
 
-  // Only hide navbar on login and register pages
+  // Hide navbar on login & register pages
   const hideNavbar = location.pathname === '/' || location.pathname === '/register';
 
   return (
     <>
-      {!hideNavbar && <Navbar />} {/* Show navbar unless on login or register */}
+      {!hideNavbar && <Navbar />} 
       <Routes>
         <Route
           path="/"
@@ -57,9 +57,12 @@ function App() {
         />
         <Route
           path="/home"
-          element={
-            isLoggedIn ? <Home onLogout={handleLogout} /> : <Navigate to="/" replace />
-          }
+          element={isLoggedIn ? <Home onLogout={handleLogout} /> : <Navigate to="/" replace />}
+        />
+        {/* ✅ New Tickets page */}
+        <Route
+          path="/tickets"
+          element={isLoggedIn ? <Tickets /> : <Navigate to="/" replace />}
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <div className="bottom-navbar">
       <button onClick={() => navigate('/home')}>Home</button>
-      <button onClick={() => navigate('/reports')}>Tickets</button>
+      <button onClick={() => navigate('/tickets')}>Tickets</button> {/* ✅ FIXED */}
       <button onClick={() => navigate('/account')}>Maintenance</button>
     </div>
   );
