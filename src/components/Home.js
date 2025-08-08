@@ -14,6 +14,10 @@ export default function Home({ onLogout }) {
   const resultsRef = useRef(null);
   const navigate = useNavigate();
 
+  // Retrieve stored user info from localStorage
+  const storedUser = JSON.parse(localStorage.getItem('user')) || {};
+  const { name, email } = storedUser;
+
   useEffect(() => {
     const fetchPanelData = async () => {
       try {
@@ -104,12 +108,17 @@ export default function Home({ onLogout }) {
         </div>
       </div>
 
-      {/* Logout button */}
-      <div className="logout-bar">
-        <button className="logout-btn" onClick={onLogout || handleLogoutClick}>
-          Logout
-        </button>
-      </div>
+      {/* User info + Logout button */}
+<div className="top-right-bar">
+  <div className="user-info">
+    <span className="user-name">{name || 'User Name'}</span>
+    <span className="user-email">{email || 'user@example.com'}</span>
+  </div>
+  <button className="logout-btn" onClick={onLogout || handleLogoutClick}>
+    Logout
+  </button>
+</div>
+
 
       {/* Top bar: Date/time + Search */}
       <div className="top-bar">

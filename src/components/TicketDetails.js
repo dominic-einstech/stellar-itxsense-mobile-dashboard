@@ -30,13 +30,22 @@ export default function TicketDetails() {
 
   const fmt = (d) => (d ? new Date(d).toLocaleString() : '-');
 
-  // Media present check
   const hasMedia = !!(ticket.faultMedia || ticket.actionMedia);
+
+  const handleAttend = () => {
+    // Add your attend action logic here
+    alert(`Attending to ticket ID: ${ticket.id}`);
+  };
 
   return (
     <div className={`ticket-details ${hasMedia ? 'has-media' : ''}`}>
       <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
-      <h2>Ticket Details</h2>
+
+      {/* Header with Attend button */}
+      <div className="ticket-header">
+        <h2>Ticket Details</h2>
+        <button className="attend-btn" onClick={handleAttend}>Attend</button>
+      </div>
 
       {/* Main two-column section */}
       <div className="ticket-two-col">
@@ -69,7 +78,7 @@ export default function TicketDetails() {
         <div><span className="label">Ticket Closure Date:</span> <span className="value">{fmt(ticket.ticketClosureDate)}</span></div>
       </div>
 
-      {/* Media section - only render if exists */}
+      {/* Media section */}
       {hasMedia && (
         <div className="media-wrap">
           {ticket.faultMedia && (
