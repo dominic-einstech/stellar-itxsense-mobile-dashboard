@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
-import Tickets from './components/Tickets'; // ✅ Import your tickets page
+import Tickets from './components/Tickets';
+import TicketDetails from './components/TicketDetails'; // ✅ Import ticket details page
 import Navbar from './components/Navbar';
 import './App.css';
 
-// Wrapper to use hooks outside <Router>
+// Wrapper to allow hooks outside <Router>
 function AppWrapper() {
   return (
     <Router>
@@ -43,7 +44,7 @@ function App() {
 
   return (
     <>
-      {!hideNavbar && <Navbar />} 
+      {!hideNavbar && <Navbar />}
       <Routes>
         <Route
           path="/"
@@ -59,11 +60,17 @@ function App() {
           path="/home"
           element={isLoggedIn ? <Home onLogout={handleLogout} /> : <Navigate to="/" replace />}
         />
-        {/* ✅ New Tickets page */}
+        {/* Tickets list page */}
         <Route
           path="/tickets"
           element={isLoggedIn ? <Tickets /> : <Navigate to="/" replace />}
         />
+        {/* Ticket details page */}
+        <Route
+          path="/ticket/:id"
+          element={isLoggedIn ? <TicketDetails /> : <Navigate to="/" replace />}
+        />
+        {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
