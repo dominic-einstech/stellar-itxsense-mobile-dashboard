@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
+import Navigation from './Navigation';
 
 export default function Home({ onLogout }) {
   const [busStopCode, setBusStopCode] = useState('');
@@ -8,7 +9,9 @@ export default function Home({ onLogout }) {
   const [totalPanels, setTotalPanels] = useState(0);
   const [digitalPanels, setDigitalPanels] = useState(0);
   const [hybridPanels, setHybridPanels] = useState(0);
+  const [searchResult, setSearchResult] = useState(null);
 
+  const resultsRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,7 +24,6 @@ export default function Home({ onLogout }) {
 
         const data = await response.json();
 
-        // Only include panels with a non-empty "Viewer ID"
         const panels = (data.data || []).filter(panel => {
           const viewerId = panel["Viewer ID"];
           return viewerId && viewerId.trim() !== '';
@@ -54,15 +56,36 @@ export default function Home({ onLogout }) {
     fetchPanelData();
   }, []);
 
-  const handleSearch = () => {
-    alert(`Searching for Bus Stop: ${busStopCode}`);
+  const handleSearch = async () => {
+    if (!busStopCode.trim()) return alert('Please enter a Bus Stop Code');
+
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/panel-docs?page=1&pageSize=all&type=All&search=${busStopCode}`
+      );
+      if (!response.ok) throw new Error('Failed to fetch search result');
+
+      const data = await response.json();
+      if (!data.data.length) {
+        alert('No results found');
+        return;
+      }
+
+      setSearchResult(data.data[0]); // store full object
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    } catch (error) {
+      console.error('Error searching:', error);
+    }
   };
 
   const handleReset = () => {
     setBusStopCode('');
+    setSearchResult(null);
   };
 
-  const handleLogout = () => {
+  const handleLogoutClick = () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user');
     navigate('/');
@@ -70,6 +93,7 @@ export default function Home({ onLogout }) {
 
   return (
     <div className="home-container">
+      {/* Header */}
       <div className="home-header">
         <div className="home-logos">
           <img src="/cropped-stellar-colored.png" alt="Stellar Logo" className="logo" />
@@ -82,7 +106,7 @@ export default function Home({ onLogout }) {
 
       {/* Logout button */}
       <div className="logout-bar">
-        <button className="logout-btn" onClick={onLogout}>Logout</button>
+        <button className="logout-btn" onClick={onLogout || handleLogoutClick}>Logout</button>
       </div>
 
       {/* Overview section */}
@@ -121,10 +145,11 @@ export default function Home({ onLogout }) {
       </div>
 
       {/* Results section */}
-      <div className="results-section">
-        <h2>Search Results</h2>
-        <p>FSAP details and navigation will appear here.</p>
-      </div>
+      {searchResult && (
+        <div ref={resultsRef} className="results-section">
+          <Navigation searchResult={searchResult} />
+        </div>
+      )}
     </div>
   );
 }

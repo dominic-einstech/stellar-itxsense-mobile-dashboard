@@ -42,6 +42,15 @@ export default function Login({ onLogin }) {
     }
   };
 
+  const handleRegisterClick = () => {
+    const enteredPassword = prompt('Enter registration access password:');
+    if (enteredPassword === process.env.REACT_APP_ACTION_PW) {
+      setShowRegister(true);
+    } else {
+      alert('Incorrect password. Access denied.');
+    }
+  };
+
   return (
     <>
       <div className="login-container">
@@ -74,7 +83,7 @@ export default function Login({ onLogin }) {
           <button
             className="login-button"
             style={{ backgroundColor: '#6c757d', marginTop: '10px' }}
-            onClick={() => setShowRegister(true)}
+            onClick={handleRegisterClick}
           >
             Register
           </button>

@@ -1,0 +1,105 @@
+.navigation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 70px; /* space above navbar */
+}
+
+.map-container {
+  width: 100%;
+  max-width: 500px; /* smaller for more space */
+  margin-bottom: 6px;
+}
+
+.map-container .leaflet-container {
+  height: 220px !important; /* reduced height for better space */
+}
+
+.navigate-btn {
+  background-color: #00897b;
+  color: #fff;
+  padding: 5px 10px; /* smaller padding */
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem; /* smaller text */
+  margin-bottom: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.navigate-btn:hover {
+  background-color: #00695c;
+}
+
+.search-results {
+  background-color: #1e1e2f;
+  color: #fff;
+  padding: 10px;
+  border-radius: 6px;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 6px;
+  font-size: 0.8rem;
+}
+
+.search-results h2 {
+  text-align: center;
+  color: #7fe3d2;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.search-results p {
+  margin: 2px 0;
+}
+
+/* Container for the Google Maps & Waze buttons */
+.navigate-btns {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end; /* align buttons to the right */
+  margin-top: 10px;
+}
+
+.google-btn {
+  background-color: #4285F4; /* Google blue */
+}
+
+.google-btn:hover {
+  background-color: #3367D6;
+}
+
+.waze-btn {
+  background-color: #05C8F7; /* Waze teal */
+}
+
+.waze-btn:hover {
+  background-color: #04A5C9;
+}
+
+/* Mobile scaling */
+@media (max-width: 600px) {
+  .map-container {
+    max-width: 100%;
+  }
+
+  .navigate-btn {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+    width: 100%; /* makes buttons stack neatly */
+  }
+
+  .search-results {
+    max-width: 100%;
+    font-size: 0.75rem;
+  }
+
+  .navigate-btns {
+    justify-content: center; /* center buttons on mobile */
+    flex-wrap: wrap;
+  }
+
+  .navigate-btns .navigate-btn {
+    width: auto; /* allow buttons to size naturally */
+  }
+}
