@@ -8,20 +8,21 @@ export default function TicketDetails() {
   const [ticket, setTicket] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchTicket = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/tickets/${id}`);
+      if (!res.ok) throw new Error('Failed to fetch ticket details');
+      const data = await res.json();
+      setTicket(data.ticket || data);
+    } catch (err) {
+      console.error('Error fetching ticket details:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchTicket = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/tickets/${id}`);
-        if (!res.ok) throw new Error('Failed to fetch ticket details');
-        const data = await res.json();
-        setTicket(data.ticket || data);
-      } catch (err) {
-        console.error('Error fetching ticket details:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchTicket();
   }, [id]);
 
@@ -32,9 +33,30 @@ export default function TicketDetails() {
 
   const hasMedia = !!(ticket.faultMedia || ticket.actionMedia);
 
-  const handleAttend = () => {
-    // Add your attend action logic here
-    alert(`Attending to ticket ID: ${ticket.id}`);
+  const handleAttend = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/tickets/${ticket.id}/attend`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            staffName: "John Doe", // TODO: Replace with actual logged-in user
+          }),
+        }
+      );
+
+      const data = await res.json();
+      if (data.success) {
+        setTicket(data.ticket); // Update ticket state instantly
+        alert("Attendance recorded!");
+      } else {
+        alert(data.message || "Unable to attend ticket.");
+      }
+    } catch (err) {
+      console.error("Error attending ticket:", err);
+      alert("Something went wrong while attending the ticket.");
+    }
   };
 
   return (
@@ -44,7 +66,14 @@ export default function TicketDetails() {
       {/* Header with Attend button */}
       <div className="ticket-header">
         <h2>Ticket Details</h2>
-        <button className="attend-btn" onClick={handleAttend}>Attend</button>
+       <button
+  className="attend-btn"
+  onClick={handleAttend}
+  disabled={!!ticket.attendedAt} // ✅ Grey out if attended
+>
+  Attend
+</button>
+
       </div>
 
       {/* Main two-column section */}
@@ -76,6 +105,7 @@ export default function TicketDetails() {
         <div><span className="label">Solution:</span> <span className="value">{ticket.solution || '-'}</span></div>
         <div><span className="label">Created By:</span> <span className="value">{ticket.createdBy || '-'}</span></div>
         <div><span className="label">Ticket Closure Date:</span> <span className="value">{fmt(ticket.ticketClosureDate)}</span></div>
+        <div><span className="label">Attended At:</span> <span className="value">{ticket.attendedAt ? fmt(ticket.attendedAt) : 'Not attended yet'}</span></div>
       </div>
 
       {/* Media section */}

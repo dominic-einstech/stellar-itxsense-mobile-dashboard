@@ -154,6 +154,11 @@ body, html {
 .attend-btn:hover {
   background-color: #00695c;
 }
+.attend-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
 
 
 /* Responsive behavior */
