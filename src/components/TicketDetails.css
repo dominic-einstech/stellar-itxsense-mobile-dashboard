@@ -103,11 +103,10 @@ body, html {
   font-size: 0.63rem;
 }
 
-/* Media container */
 .media-wrap {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 1 or 2 columns depending on count */
+  gap: 12px;
   margin-top: 8px;
 }
 
@@ -131,8 +130,9 @@ body, html {
   height: auto;
   border-radius: 4px;
   object-fit: contain;
-  max-height: 150px; /* reduced height so full media fits */
+  max-height: 150px;
 }
+
 .ticket-header {
   display: flex;
   justify-content: space-between;

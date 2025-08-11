@@ -25,6 +25,15 @@ function getRange(range) {
     return { start: s, end: e };
   }
 
+  if (range === 'lastWeek') {
+    // Week starts Monday
+    const s = startOfDay(now);
+    const day = (s.getDay() + 6) % 7; // Mon=0..Sun=6
+    s.setDate(s.getDate() - day - 7); // start of last week
+    const e = new Date(s); e.setDate(e.getDate() + 7);
+    return { start: s, end: e };
+  }
+
   if (range === 'thisMonth') {
     const s = new Date(now.getFullYear(), now.getMonth(), 1);
     const e = new Date(now.getFullYear(), now.getMonth() + 1, 1);
@@ -44,8 +53,9 @@ function getRange(range) {
 export default function Tickets() {
   const [tickets, setTickets] = useState([]);
   const [filter, setFilter] = useState('all'); // all | inProgress | open
-  const [timeRange, setTimeRange] = useState('all'); // all | today | thisWeek | thisMonth | lastMonth
+  const [timeRange, setTimeRange] = useState('all'); // all | today | thisWeek | lastWeek | thisMonth | lastMonth
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(''); // 🔍 New search state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,10 +88,19 @@ export default function Tickets() {
   });
 
   // Then apply status filter
-  const filteredTickets = withinRangeTickets.filter(ticket => {
+  const filteredByStatus = withinRangeTickets.filter(ticket => {
     if (filter === 'inProgress') return ticket.status?.toLowerCase() === 'in progress';
     if (filter === 'open') return ticket.status?.toLowerCase() === 'open';
     return true;
+  });
+
+  // 🔍 Apply search filter
+  const filteredTickets = filteredByStatus.filter(ticket => {
+    const term = searchTerm.toLowerCase();
+    return (
+      ticket.busStopCode?.toLowerCase().includes(term) ||
+      ticket.location?.toLowerCase().includes(term)
+    );
   });
 
   // Counts respect current time range
@@ -98,12 +117,13 @@ export default function Tickets() {
         <button className={timeRange === 'all' ? 'active' : ''} onClick={() => setTimeRange('all')}>All Time</button>
         <button className={timeRange === 'today' ? 'active' : ''} onClick={() => setTimeRange('today')}>Today</button>
         <button className={timeRange === 'thisWeek' ? 'active' : ''} onClick={() => setTimeRange('thisWeek')}>This Week</button>
+        <button className={timeRange === 'lastWeek' ? 'active' : ''} onClick={() => setTimeRange('lastWeek')}>Last Week</button>
         <button className={timeRange === 'thisMonth' ? 'active' : ''} onClick={() => setTimeRange('thisMonth')}>This Month</button>
         <button className={timeRange === 'lastMonth' ? 'active' : ''} onClick={() => setTimeRange('lastMonth')}>Last Month</button>
       </div>
 
       {/* Status filter */}
-      <div className="ticket-filters">
+      <div className="ticket-filters" style={{ marginBottom: 10 }}>
         <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>
           All ({countAll})
         </button>
@@ -114,6 +134,15 @@ export default function Tickets() {
           Open ({countOpen})
         </button>
       </div>
+
+      {/* 🔍 Search bar */}
+      <input
+        type="text"
+        placeholder="Search by Bus Stop Code or Location"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ width: '100%', padding: '6px', marginBottom: '10px' }}
+      />
 
       {loading ? (
         <p style={{ textAlign: 'center' }}>Loading tickets...</p>
