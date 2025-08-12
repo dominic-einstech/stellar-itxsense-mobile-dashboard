@@ -11,12 +11,22 @@ export default function Home({ onLogout }) {
   const [hybridPanels, setHybridPanels] = useState(0);
   const [searchResult, setSearchResult] = useState(null);
 
+  const [currentTime, setCurrentTime] = useState(new Date()); // 🕒 Store live time
+
   const resultsRef = useRef(null);
   const navigate = useNavigate();
 
-  // Retrieve stored user info from localStorage
   const storedUser = JSON.parse(localStorage.getItem('user')) || {};
   const { name, email } = storedUser;
+
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000); // update every second
+
+    return () => clearInterval(timer); // cleanup
+  }, []);
 
   useEffect(() => {
     const fetchPanelData = async () => {
@@ -109,20 +119,22 @@ export default function Home({ onLogout }) {
       </div>
 
       {/* User info + Logout button */}
-<div className="top-right-bar">
-  <div className="user-info">
-    <span className="user-name">{name || 'User Name'}</span>
-    <span className="user-email">{email || 'user@example.com'}</span>
-  </div>
-  <button className="logout-btn" onClick={onLogout || handleLogoutClick}>
-    Logout
-  </button>
-</div>
-
+      <div className="top-right-bar">
+        <div className="user-info">
+          <span className="user-name">{name || 'User Name'}</span>
+          <span className="user-email">{email || 'user@example.com'}</span>
+        </div>
+        <button className="logout-btn" onClick={onLogout || handleLogoutClick}>
+          Logout
+        </button>
+      </div>
 
       {/* Top bar: Date/time + Search */}
       <div className="top-bar">
-        <p className="home-timestamp">{new Date().toLocaleString()}</p>
+       <p className="home-timestamp">
+  {currentTime.toLocaleDateString('en-GB')} {currentTime.toLocaleTimeString()}
+</p>
+
         <div className="search-inline">
           <input
             type="text"

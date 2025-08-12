@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
 import Tickets from './components/Tickets';
-import TicketDetails from './components/TicketDetails'; // ✅ Import ticket details page
+import TicketDetails from './components/TicketDetails';
 import Navbar from './components/Navbar';
 import './App.css';
 
@@ -20,7 +20,45 @@ function AppWrapper() {
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
+  const inactivityTimer = useRef(null);
 
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+  };
+
+  // Reset inactivity timer
+  const resetTimer = () => {
+    if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+    inactivityTimer.current = setTimeout(() => {
+      if (localStorage.getItem('isLoggedIn') === 'true') {
+        alert('You have been logged out due to inactivity.');
+        handleLogout();
+      }
+    }, 5 * 60 * 1000); // 5 minutes
+  };
+
+  // Set up activity listeners
+  useEffect(() => {
+    const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+
+    activityEvents.forEach(event =>
+      window.addEventListener(event, resetTimer)
+    );
+
+    resetTimer(); // start timer on mount
+
+    return () => {
+      activityEvents.forEach(event =>
+        window.removeEventListener(event, resetTimer)
+      );
+      if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+    };
+  }, []);
+
+  // Monitor login state from localStorage
   useEffect(() => {
     const interval = setInterval(() => {
       const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -31,12 +69,7 @@ function App() {
 
   const handleLogin = () => {
     setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
+    resetTimer(); // start/reset timer when logged in
   };
 
   // Hide navbar on login & register pages
@@ -60,17 +93,14 @@ function App() {
           path="/home"
           element={isLoggedIn ? <Home onLogout={handleLogout} /> : <Navigate to="/" replace />}
         />
-        {/* Tickets list page */}
         <Route
           path="/tickets"
           element={isLoggedIn ? <Tickets /> : <Navigate to="/" replace />}
         />
-        {/* Ticket details page */}
         <Route
           path="/ticket/:id"
           element={isLoggedIn ? <TicketDetails /> : <Navigate to="/" replace />}
         />
-        {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

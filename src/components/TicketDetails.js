@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './TicketDetails.css';
+import EditTicketDetails from './EditTicketDetails'; // ✅ Import your edit component
 
 export default function TicketDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [ticket, setTicket] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // New states
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [statusUpdating, setStatusUpdating] = useState(false);
+  const [showEditDetails, setShowEditDetails] = useState(false); // ✅ Controls Edit view
 
   const fetchTicket = async () => {
     try {
@@ -48,7 +54,7 @@ export default function TicketDetails() {
 
       const data = await res.json();
       if (data.success) {
-        setTicket(data.ticket); // Update ticket state instantly
+        setTicket(data.ticket);
         alert("Attendance recorded!");
       } else {
         alert(data.message || "Unable to attend ticket.");
@@ -59,21 +65,72 @@ export default function TicketDetails() {
     }
   };
 
+  const handleStatusChange = async (newStatus) => {
+    try {
+      setStatusUpdating(true);
+      const payload = new FormData();
+      payload.append("status", newStatus);
+
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/tickets/${ticket.id}`, {
+        method: "PUT",
+        body: payload
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setTicket(data.ticket);
+        alert(`Status set to ${newStatus}`);
+        setShowStatusModal(false);
+      } else {
+        alert(data.message || 'Failed to update status');
+      }
+    } catch (err) {
+      console.error('Error updating status:', err);
+      alert('Something went wrong while updating status.');
+    } finally {
+      setStatusUpdating(false);
+    }
+  };
+
+  // ✅ If Edit button clicked, show EditTicketDetails component
+  if (showEditDetails) {
+    return (
+      <EditTicketDetails
+        ticket={ticket}
+        onClose={() => setShowEditDetails(false)}
+        onTicketUpdated={fetchTicket} // Refresh after update
+      />
+    );
+  }
+
   return (
     <div className={`ticket-details ${hasMedia ? 'has-media' : ''}`}>
       <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
 
-      {/* Header with Attend button */}
+      {/* Header with buttons */}
       <div className="ticket-header">
         <h2>Ticket Details</h2>
-       <button
-  className="attend-btn"
-  onClick={handleAttend}
-  disabled={!!ticket.attendedAt} // ✅ Grey out if attended
->
-  Attend
-</button>
-
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            className="attend-btn"
+            onClick={handleAttend}
+            disabled={!!ticket.attendedAt}
+          >
+            Attend
+          </button>
+          <button
+            className="status-btn"
+            onClick={() => setShowStatusModal(true)}
+          >
+            Set Status
+          </button>
+          <button
+            className="status-btn"
+            onClick={() => setShowEditDetails(true)} // ✅ Opens EditTicketDetails
+          >
+            Edit
+          </button>
+        </div>
       </div>
 
       {/* Main two-column section */}
@@ -121,7 +178,6 @@ export default function TicketDetails() {
               )}
             </div>
           )}
-
           {ticket.actionMedia && (
             <div className="media-card">
               <div className="label">Action Media</div>
@@ -132,6 +188,33 @@ export default function TicketDetails() {
               )}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Status Modal */}
+      {showStatusModal && (
+        <div className="status-modal">
+          <div className="status-modal-content">
+            <h3>Set Ticket Status</h3>
+            <button
+              onClick={() => handleStatusChange("Open")}
+              disabled={statusUpdating}
+            >
+              Open
+            </button>
+            <button
+              onClick={() => handleStatusChange("Closed")}
+              disabled={statusUpdating}
+            >
+              Closed
+            </button>
+            <button
+              className="cancel-btn"
+              onClick={() => setShowStatusModal(false)}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -81,7 +81,7 @@ body, html {
 }
 
 .status.open {
-  color: #4ade80;
+  color: #ef4444;
   font-weight: bold;
 }
 
@@ -91,7 +91,8 @@ body, html {
 }
 
 .status.closed {
-  color: #ef4444;
+  color: #4ade80;
+  
   font-weight: bold;
 }
 
@@ -103,11 +104,13 @@ body, html {
   font-size: 0.63rem;
 }
 
+/* Force fault and action media side-by-side */
 .media-wrap {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 1 or 2 columns depending on count */
+  grid-template-columns: repeat(2, 1fr); /* Always two columns */
   gap: 12px;
   margin-top: 8px;
+  align-items: start;
 }
 
 .media-card {
@@ -132,6 +135,15 @@ body, html {
   object-fit: contain;
   max-height: 150px;
 }
+
+/* On very small screens, still keep 2 columns but allow scroll if needed */
+@media (max-width: 500px) {
+  .media-wrap {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow-x: auto;
+  }
+}
+
 
 .ticket-header {
   display: flex;
@@ -160,10 +172,178 @@ body, html {
   opacity: 0.6;
 }
 
+/* ===== New styles for Set Status button ===== */
+.status-btn {
+  background-color: #2563eb; /* blue */
+  color: #fff;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 8px; /* space from Attend button */
+  transition: background-color 0.2s ease;
+}
+
+.status-btn:hover {
+  background-color: #1d4ed8;
+}
+
+/* ===== Modal overlay ===== */
+.status-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* ===== Modal box ===== */
+.status-modal-content {
+  background-color: #2a2a40;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+}
+
+.status-modal-content h3 {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  color: #fff;
+}
+
+/* ===== Modal buttons ===== */
+.status-modal-content button {
+  margin: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.status-modal-content button:nth-child(2) {
+  background-color: #4ade80; /* green for Open */
+  color: #000;
+}
+
+.status-modal-content button:nth-child(2):hover {
+  background-color: #22c55e;
+}
+
+.status-modal-content button:nth-child(3) {
+  background-color: #ef4444; /* red for Closed */
+  color: #fff;
+}
+
+.status-modal-content button:nth-child(3):hover {
+  background-color: #dc2626;
+}
+
+.status-modal-content .cancel-btn {
+  background-color: #6b7280; /* gray */
+  color: #fff;
+}
+
+.status-modal-content .cancel-btn:hover {
+  background-color: #4b5563;
+}
+
+
 
 /* Responsive behavior */
 @media (max-width: 700px) {
   .ticket-two-col {
     grid-template-columns: 1fr;
   }
+
+  /* ===== New styles for Set Status button ===== */
+.status-btn {
+  background-color: #2563eb; /* blue */
+  color: #fff;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: 8px; /* space from Attend button */
+  transition: background-color 0.2s ease;
+}
+
+.status-btn:hover {
+  background-color: #1d4ed8;
+}
+
+/* ===== Modal overlay ===== */
+.status-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* ===== Modal box ===== */
+.status-modal-content {
+  background-color: #2a2a40;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+}
+
+.status-modal-content h3 {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  color: #fff;
+}
+
+/* ===== Modal buttons ===== */
+.status-modal-content button {
+  margin: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.status-modal-content button:nth-child(2) {
+  background-color: #4ade80; /* green for Open */
+  color: #000;
+}
+
+.status-modal-content button:nth-child(2):hover {
+  background-color: #22c55e;
+}
+
+.status-modal-content button:nth-child(3) {
+  background-color: #ef4444; /* red for Closed */
+  color: #fff;
+}
+
+.status-modal-content button:nth-child(3):hover {
+  background-color: #dc2626;
+}
+
+.status-modal-content .cancel-btn {
+  background-color: #6b7280; /* gray */
+  color: #fff;
+}
+
+.status-modal-content .cancel-btn:hover {
+  background-color: #4b5563;
+}
+
 }

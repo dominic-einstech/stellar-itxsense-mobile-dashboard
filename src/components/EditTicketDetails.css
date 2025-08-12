@@ -1,0 +1,220 @@
+.edit-ticket-details {
+  padding: 16px;
+  background-color: #1e1e2f;
+  color: #fff;
+  border-radius: 8px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.edit-ticket-details h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 1px solid #33334d;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
+.edit-ticket-details label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #bbb;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.edit-ticket-details input[type="text"],
+.edit-ticket-details input[type="file"],
+.edit-ticket-details textarea,
+.edit-ticket-details select {
+  width: 100%;
+  padding: 8px 10px;
+  background-color: #2a2a40;
+  border: 1px solid #44445e;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.85rem;
+  box-sizing: border-box;
+}
+
+.edit-ticket-details textarea {
+  resize: vertical;
+  min-height: 70px;
+  line-height: 1.4;
+}
+
+.edit-ticket-media {
+  background-color: #2a2a40;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.edit-ticket-media img,
+.edit-ticket-media video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  object-fit: contain;
+  max-height: 200px;
+}
+
+.remove-media-button {
+  background-color: #ef4444;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  margin-top: 8px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background-color 0.2s ease;
+}
+
+.remove-media-button:hover {
+  background-color: #dc2626;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.save-btn {
+  background-color: #00897b;
+  color: #fff;
+  font-weight: bold;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.save-btn:hover {
+  background-color: #00695c;
+}
+
+.cancel-btn {
+  background-color: #6b7280;
+  color: #fff;
+  font-weight: bold;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.cancel-btn:hover {
+  background-color: #4b5563;
+}
+/* Wrapper to allow form scroll while keeping buttons visible */
+.edit-ticket-details-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.edit-ticket-details {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 70px; /* space so last field isn't hidden */
+}
+
+/* Sticky container above navbar */
+.sticky-buttons {
+  position: sticky;
+  bottom: 60px; /* equal to navbar height */
+  background-color: #1e1e2f;
+  padding: 10px 0;
+  z-index: 1001;
+  border-top: 1px solid #33334d;
+}
+
+/* Side-by-side layout */
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap; /* keep them in one row */
+  margin-top: 0; /* remove extra spacing */
+}
+
+.save-btn,
+.cancel-btn {
+  flex: 1; /* equal width */
+  min-width: 120px;
+}
+
+
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .edit-ticket-details {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .edit-ticket-details h2 {
+    font-size: 1rem;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+}
+/* Mobile adjustments for all devices up to ~iPhone 15 Pro Max */
+@media (max-width: 600px) {
+  .edit-ticket-details {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .edit-ticket-details h2 {
+    font-size: 1rem;
+  }
+
+  /* Keep buttons side by side */
+  .form-buttons {
+    flex-direction: row;  /* Force horizontal layout */
+    gap: 8px;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    flex: 1;              /* Equal width */
+    min-width: unset;     /* Remove fixed min-width */
+    font-size: 0.85rem;   /* Slightly smaller for mobile */
+    padding: 10px;
+  }
+}
+
+/* Specific for iPhone 15 Pro Max dimensions */
+@media only screen 
+  and (device-width: 430px) 
+  and (device-height: 932px) 
+  and (-webkit-device-pixel-ratio: 3) {
+  
+  .form-buttons {
+    gap: 6px;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+  
+}
